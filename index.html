@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conciergerie Casablanca Heaven — Gestion locative premium à Casablanca</title>
+  <meta name="description" content="Conciergerie premium à Casablanca pour propriétaires et investisseurs : location courte durée, optimisation Airbnb/Booking, ménage, check-in, reporting et maximisation des revenus." />
+  <link rel="icon" href="logo/casablanca-heaven.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="assets/properties-heaven.js" defer></script>
+  <style>
+    :root{
+      --night:#070504;
+      --ink:#15100c;
+      --brown:#7a350f;
+      --gold:#c5822c;
+      --gold2:#f1d38e;
+      --cream:#fff8ec;
+      --ivory:#fffdf7;
+      --muted:#7c7166;
+      --line:rgba(122,53,15,.16);
+      --shadow:0 28px 80px rgba(37,20,8,.14);
+      --radius:28px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fffaf0 0%,#fffdf7 36%,#f8efe1 100%);overflow-x:hidden}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(1180px,calc(100% - 36px));margin-inline:auto}
+    .section{padding:clamp(68px,8vw,116px) 0}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid rgba(197,130,44,.28);border-radius:999px;background:rgba(255,255,255,.62);color:var(--brown);font-weight:900;font-size:13px;letter-spacing:.06em;text-transform:uppercase;backdrop-filter:blur(14px)}
+    .eyebrow::before{content:"";width:8px;height:8px;border-radius:99px;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 0 0 6px rgba(197,130,44,.12)}
+    .h2{font-size:clamp(34px,5vw,68px);line-height:.96;letter-spacing:-.06em;margin:18px 0;color:#17100b}
+    .lead{font-size:clamp(17px,2vw,21px);line-height:1.75;color:#675d52;max-width:760px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 22px;border-radius:999px;font-weight:900;border:1px solid transparent;transition:.25s ease;cursor:pointer;white-space:nowrap}
+    .btn.primary{background:linear-gradient(135deg,#8e3a10,#c5822c 56%,#f1d38e);color:#fff;box-shadow:0 18px 50px rgba(122,53,15,.26)}
+    .btn.dark{background:#120d09;color:#fff;box-shadow:0 18px 55px rgba(0,0,0,.18)}
+    .btn.ghost{background:rgba(255,255,255,.72);color:#5f2a0e;border-color:rgba(122,53,15,.16)}
+    .btn:hover{transform:translateY(-2px)}
+    header{position:fixed;z-index:50;top:16px;left:0;right:0}
+    .nav{width:min(1180px,calc(100% - 36px));margin:auto;min-height:74px;display:flex;align-items:center;gap:18px;padding:10px 12px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,253,247,.78);box-shadow:0 16px 50px rgba(30,14,5,.12);backdrop-filter:blur(20px)}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em}
+    .brand img{height:54px;width:54px;object-fit:contain;border-radius:50%;background:#050505;padding:4px}
+    .brand span{line-height:1}.brand small{display:block;color:var(--gold);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+    nav{margin-left:auto;display:flex;align-items:center;gap:4px} nav a{font-size:14px;font-weight:800;color:#382016;padding:11px 13px;border-radius:999px} nav a:hover{background:#fff3db}
+    .menu-cta{margin-left:4px}
+    .hero{min-height:100vh;position:relative;display:flex;align-items:center;padding:142px 0 64px;isolation:isolate;overflow:hidden;background:#130d09}
+    .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,5,3,.92) 0%,rgba(8,5,3,.72) 39%,rgba(8,5,3,.20) 72%),linear-gradient(180deg,rgba(8,5,3,.08),rgba(8,5,3,.78)),url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=2200&q=86') center/cover;z-index:-2;transform:scale(1.02)}
+    .hero::after{content:"";position:absolute;width:620px;height:620px;right:-180px;top:110px;border-radius:50%;background:radial-gradient(circle,rgba(241,211,142,.38),rgba(197,130,44,.12) 38%,transparent 68%);filter:blur(8px);z-index:-1}
+    .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:42px;align-items:end}
+    .hero h1{font-size:clamp(48px,8.2vw,108px);line-height:.88;letter-spacing:-.085em;color:#fff;margin:18px 0;text-wrap:balance}.hero h1 .gold{color:var(--gold2)}
+    .hero p{font-size:clamp(17px,2vw,22px);line-height:1.72;color:rgba(255,255,255,.78);max-width:690px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .hero-panel{background:rgba(255,253,247,.86);border:1px solid rgba(255,255,255,.56);box-shadow:0 30px 90px rgba(0,0,0,.28);border-radius:36px;padding:22px;backdrop-filter:blur(22px)}
+    .mini-dashboard{display:grid;gap:12px}.metric{padding:18px;border-radius:24px;background:#fff;border:1px solid rgba(122,53,15,.10)}.metric b{display:block;font-size:clamp(24px,3vw,38px);letter-spacing:-.05em}.metric span{color:#796d62;font-weight:700;font-size:13px}.metric.featured{background:linear-gradient(135deg,#190f08,#6f2c0b 58%,#c5822c);color:#fff}.metric.featured span{color:rgba(255,255,255,.75)}
+    .trust-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}.trust{padding:16px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff}.trust strong{display:block;font-size:20px}.trust span{color:rgba(255,255,255,.65);font-size:13px}
+    .logo-cloud{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.logo-pill{padding:9px 13px;border-radius:999px;background:#fff;border:1px solid var(--line);font-weight:900;color:#65300f;font-size:13px}
+    .split{display:grid;grid-template-columns:.9fr 1.1fr;gap:38px;align-items:center}.visual-card{position:relative;border-radius:42px;overflow:hidden;min-height:560px;box-shadow:var(--shadow);background:#111}.visual-card img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}.visual-card .float{position:absolute;left:22px;right:22px;bottom:22px;background:rgba(255,253,247,.84);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.58);border-radius:28px;padding:20px}.float strong{font-size:24px;letter-spacing:-.04em}.float p{margin:8px 0 0;color:#6b5c50;line-height:1.6}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}.card{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:0 18px 60px rgba(51,26,10,.07);backdrop-filter:blur(14px)}.card .icon{width:48px;height:48px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#fff4d9,#ffffff);font-size:22px;margin-bottom:18px}.card h3{font-size:22px;letter-spacing:-.04em;margin:0 0 10px}.card p{color:#6f6257;line-height:1.65;margin:0}
+    .neighborhoods{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}.hood{min-height:250px;border-radius:30px;position:relative;overflow:hidden;padding:18px;display:flex;align-items:flex-end;color:#fff;box-shadow:0 24px 70px rgba(28,15,6,.14)}.hood::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.78)),var(--bg) center/cover}.hood div{position:relative;z-index:1}.hood b{font-size:23px;letter-spacing:-.04em}.hood span{display:block;color:rgba(255,255,255,.76);font-weight:700;margin-top:6px}
+    .properties-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:28px}.properties-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.property{overflow:hidden;border-radius:32px;background:#fff;border:1px solid var(--line);box-shadow:0 20px 70px rgba(44,21,8,.10)}.property-img{height:230px;position:relative;overflow:hidden}.property-img img{width:100%;height:100%;object-fit:cover;transition:.5s}.property:hover .property-img img{transform:scale(1.06)}.badge{position:absolute;left:14px;top:14px;padding:8px 11px;border-radius:999px;background:rgba(255,253,247,.88);backdrop-filter:blur(10px);font-weight:900;color:#70310f;font-size:12px}.property-body{padding:18px}.property h3{font-size:20px;line-height:1.1;letter-spacing:-.04em;margin:0 0 8px}.property p{color:#75685e;line-height:1.55;margin:0 0 14px;font-size:14px}.meta{display:flex;gap:10px;flex-wrap:wrap;color:#6d5e52;font-weight:800;font-size:12px;margin-bottom:14px}.property-actions{display:flex;gap:8px}.property-actions a{flex:1;text-align:center;padding:11px 10px;border-radius:14px;font-weight:900;font-size:13px;background:#170f0a;color:#fff}.property-actions a.secondary{background:#fff7e8;color:#71330f;border:1px solid var(--line)}.property-actions a.disabled{opacity:.45;pointer-events:none}
+    .process{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px;counter-reset:step}.step{position:relative;padding:25px;border-radius:28px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 50px rgba(51,26,10,.06)}.step::before{counter-increment:step;content:"0" counter(step);display:inline-flex;width:44px;height:44px;border-radius:15px;align-items:center;justify-content:center;background:#170f0a;color:#f1d38e;font-weight:900;margin-bottom:18px}.step h3{margin:0 0 8px;font-size:20px}.step p{color:#6e6258;line-height:1.6;margin:0;font-size:14px}
+    .pricing{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;align-items:stretch}.pricing-card{border-radius:40px;padding:34px;background:linear-gradient(135deg,#170f0a,#6a2b0d 62%,#c5822c);color:#fff;box-shadow:0 30px 90px rgba(88,38,9,.22)}.pricing-card h3{font-size:40px;line-height:1;letter-spacing:-.06em;margin:0}.pricing-card p{color:rgba(255,255,255,.75);line-height:1.65}.pricing-card .big{font-size:70px;font-weight:950;letter-spacing:-.08em;color:#f1d38e}.checklist{display:grid;gap:12px}.check{padding:18px 20px;border-radius:23px;background:#fff;border:1px solid var(--line);font-weight:800;color:#2b1a10}.check::before{content:"✓";margin-right:10px;color:#9b4a15;font-weight:950}
+    .cta-band{border-radius:44px;background:radial-gradient(circle at 20% 0%,rgba(241,211,142,.38),transparent 42%),linear-gradient(135deg,#0b0705,#4c1e09 60%,#985419);padding:clamp(32px,6vw,64px);color:#fff;position:relative;overflow:hidden}.cta-band h2{font-size:clamp(38px,6vw,76px);line-height:.95;letter-spacing:-.07em;margin:0 0 18px}.cta-band p{color:rgba(255,255,255,.76);font-size:19px;line-height:1.7;max-width:760px}.cta-band .btn.ghost{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.20)}
+    footer{padding:34px 0 48px;background:#0b0705;color:rgba(255,255,255,.72)}footer .foot{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}footer img{height:62px;width:auto;object-fit:contain}footer a{color:#f1d38e;font-weight:800}
+    .reveal{opacity:0;transform:translateY(22px);transition:all .75s cubic-bezier(.2,.8,.2,1)}.reveal.visible{opacity:1;transform:none}
+    @media(max-width:1020px){.hero-grid,.split,.pricing{grid-template-columns:1fr}.hero-panel{max-width:620px}.cards,.properties-grid{grid-template-columns:repeat(2,1fr)}.neighborhoods,.process{grid-template-columns:repeat(2,1fr)}nav{display:none}.trust-row{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){header{top:8px}.nav{border-radius:24px}.brand span{display:none}.hero{padding-top:120px}.hero-actions,.property-actions{flex-direction:column}.cards,.properties-grid,.neighborhoods,.process,.trust-row{grid-template-columns:1fr}.visual-card{min-height:430px}.properties-head{display:block}.btn{width:100%}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="#top" aria-label="Accueil Casablanca Heaven">
+        <img src="logo/casablanca-heaven.png" alt="Logo Conciergerie Casablanca Heaven" />
+        <span>Casablanca Heaven<small>Conciergerie premium</small></span>
+      </a>
+      <nav>
+        <a href="#offre">Offre</a>
+        <a href="#quartiers">Quartiers</a>
+        <a href="#biens">Biens</a>
+        <a href="#process">Méthode</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn primary menu-cta wa-link" href="https://wa.me/212665889233" target="_blank" rel="noopener">Estimation gratuite</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <span class="eyebrow">Casablanca · Location courte durée</span>
+          <h1>Vos biens méritent une gestion <span class="gold">heaven level.</span></h1>
+          <p>Une conciergerie pensée pour les propriétaires exigeants : annonces premium, pricing intelligent, expérience voyageur impeccable et suivi clair des revenus.</p>
+          <div class="hero-actions">
+            <a class="btn primary wa-link" href="https://wa.me/212665889233" target="_blank" rel="noopener">Demander une estimation</a>
+            <a class="btn ghost" href="#biens">Voir les biens en gestion</a>
+          </div>
+          <div class="trust-row">
+            <div class="trust"><strong>Airbnb</strong><span>Optimisation annonce</span></div>
+            <div class="trust"><strong>Booking</strong><span>Distribution multi-canal</span></div>
+            <div class="trust"><strong>24/7</strong><span>Parcours voyageur fluide</span></div>
+            <div class="trust"><strong>Net</strong><span>Reporting propriétaire</span></div>
+          </div>
+        </div>
+        <aside class="hero-panel reveal">
+          <div class="mini-dashboard">
+            <div class="metric featured"><b>+ de nuits vendues</b><span>Objectif : réduire les trous calendrier et mieux vendre les pics.</span></div>
+            <div class="metric"><b>Prix ajustés</b><span>Selon quartier, saison, événements et demande.</span></div>
+            <div class="metric"><b>Bien impeccable</b><span>Ménage, linge, consommables, check-in, assistance.</span></div>
+          </div>
+          <div class="logo-cloud">
+            <span class="logo-pill">CFC</span><span class="logo-pill">Gauthier</span><span class="logo-pill">Racine</span><span class="logo-pill">Aïn Diab</span><span class="logo-pill">Maarif</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="offre" class="section">
+      <div class="container split">
+        <div class="visual-card reveal">
+          <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=84" alt="Appartement premium à Casablanca" />
+          <div class="float">
+            <strong>On ne gère pas juste un appartement.</strong>
+            <p>On construit une vitrine rentable : photos, texte, prix, disponibilité, propreté, avis et réachat.</p>
+          </div>
+        </div>
+        <div class="reveal">
+          <span class="eyebrow">Positionnement</span>
+          <h2 class="h2">Une conciergerie pour investisseurs carrés.</h2>
+          <p class="lead">Casablanca Heaven cible les appartements qui peuvent devenir de vraies machines de revenu : bons quartiers, belle présentation, expérience client propre, suivi financier lisible.</p>
+          <div class="cards" style="grid-template-columns:1fr 1fr;margin-top:26px">
+            <div class="card"><div class="icon">♛</div><h3>Image premium</h3><p>Une annonce qui donne envie de réserver, pas juste un logement posé en ligne.</p></div>
+            <div class="card"><div class="icon">↗</div><h3>Revenu optimisé</h3><p>Objectif : maximiser le revenu net, pas seulement remplir le calendrier.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="background:rgba(255,255,255,.48)">
+      <div class="container">
+        <span class="eyebrow reveal">Gestion complète</span>
+        <h2 class="h2 reveal">Tout ce qui fait la différence entre une annonce moyenne et un actif rentable.</h2>
+        <div class="cards">
+          <article class="card reveal"><div class="icon">📸</div><h3>Préparation annonce</h3><p>Titre, photos, texte, équipements, positionnement et angles de vente adaptés au quartier.</p></article>
+          <article class="card reveal"><div class="icon">💰</div><h3>Pricing dynamique</h3><p>Ajustement des prix selon demande, saison, événements, durée de séjour et concurrence.</p></article>
+          <article class="card reveal"><div class="icon">🧼</div><h3>Qualité opérationnelle</h3><p>Ménage, linge, consommables essentiels, contrôle avant arrivée et suivi des incidents.</p></article>
+          <article class="card reveal"><div class="icon">🔐</div><h3>Check-in fluide</h3><p>Arrivées simples, instructions propres, codes, guide digital et assistance voyageur.</p></article>
+          <article class="card reveal"><div class="icon">⭐</div><h3>Avis voyageurs</h3><p>Communication rapide, standards constants et parcours pensé pour protéger la note.</p></article>
+          <article class="card reveal"><div class="icon">📊</div><h3>Reporting propriétaire</h3><p>Réservations, revenus, dépenses, commissions et solde net : une lecture claire.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="quartiers" class="section">
+      <div class="container">
+        <span class="eyebrow reveal">Casablanca</span>
+        <h2 class="h2 reveal">Les quartiers qu’on veut travailler en priorité.</h2>
+        <p class="lead reveal">On vise les zones où la demande business, loisirs et courte durée peut justifier une présentation haut de gamme.</p>
+        <div class="neighborhoods">
+          <article class="hood reveal" style="--bg:url('https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=900&q=80')"><div><b>CFC</b><span>Business, corporate, courts séjours</span></div></article>
+          <article class="hood reveal" style="--bg:url('https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=900&q=80')"><div><b>Gauthier</b><span>Central, vivant, pratique</span></div></article>
+          <article class="hood reveal" style="--bg:url('https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=900&q=80')"><div><b>Racine</b><span>Premium, résidentiel, élégant</span></div></article>
+          <article class="hood reveal" style="--bg:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80')"><div><b>Aïn Diab</b><span>Mer, loisirs, week-ends</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="biens" class="section" style="background:#fffaf1">
+      <div class="container">
+        <div class="properties-head">
+          <div>
+            <span class="eyebrow reveal">Biens représentés</span>
+            <h2 class="h2 reveal">Une vitrine concrète pour rassurer les propriétaires.</h2>
+          </div>
+          <p class="lead reveal" style="max-width:470px">Les liens Airbnb/Booking se rajoutent simplement dans le fichier <strong>assets/properties-heaven.js</strong>. Les cartes sont déjà prêtes.</p>
+        </div>
+        <div id="propertiesGrid" class="properties-grid"></div>
+      </div>
+    </section>
+
+    <section id="process" class="section">
+      <div class="container">
+        <span class="eyebrow reveal">Méthode</span>
+        <h2 class="h2 reveal">Simple pour le propriétaire. Très carré derrière.</h2>
+        <div class="process">
+          <div class="step reveal"><h3>Audit du bien</h3><p>Quartier, standing, concurrence, potentiel nuitée, points faibles et quick wins.</p></div>
+          <div class="step reveal"><h3>Mise en scène</h3><p>Photos, équipements, consommables, guide voyageur, annonce optimisée.</p></div>
+          <div class="step reveal"><h3>Exploitation</h3><p>Réservations, check-in, ménage, maintenance légère, communication voyageurs.</p></div>
+          <div class="step reveal"><h3>Reporting</h3><p>Suivi mensuel clair : revenus, dépenses, commission et revenu net propriétaire.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container pricing">
+        <div class="pricing-card reveal">
+          <span class="eyebrow" style="background:rgba(255,255,255,.12);color:#f1d38e;border-color:rgba(255,255,255,.18)">Modèle clair</span>
+          <h3>Une rémunération alignée sur la performance.</h3>
+          <p>Le propriétaire veut du revenu net. Notre rôle : rendre le bien désirable, visible, propre et mieux occupé.</p>
+          <div class="big">Max revenu</div>
+          <p style="margin-bottom:0">La commission exacte peut être ajustée selon le quartier, le standing, le volume et le niveau de service demandé.</p>
+        </div>
+        <div class="checklist reveal">
+          <div class="check">Estimation gratuite du potentiel locatif</div>
+          <div class="check">Création ou reprise des annonces Airbnb / Booking</div>
+          <div class="check">Optimisation des photos, textes, prix et disponibilités</div>
+          <div class="check">Ménage, linge, consommables et contrôle qualité</div>
+          <div class="check">Gestion voyageurs avant, pendant et après séjour</div>
+          <div class="check">Reporting propriétaire mensuel</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="cta-band reveal">
+          <span class="eyebrow" style="background:rgba(255,255,255,.12);color:#f1d38e;border-color:rgba(255,255,255,.18)">Propriétaire à Casablanca ?</span>
+          <h2>Envoyez-nous votre bien. On vous dit s’il peut performer.</h2>
+          <p>Adresse, nombre de chambres, photos si disponibles, quartier et objectif. On vous répond avec une première lecture claire du potentiel.</p>
+          <div class="hero-actions">
+            <a class="btn primary wa-link" href="https://wa.me/212665889233" target="_blank" rel="noopener">WhatsApp — estimation gratuite</a>
+            <a class="btn ghost" href="mailto:conciergeriecasablancaheaven@gmail.com">Envoyer un email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <div style="display:flex;align-items:center;gap:14px"><img src="logo/casablanca-heaven.png" alt="Casablanca Heaven"/><span><strong>Conciergerie Casablanca Heaven</strong><br/>Gestion locative premium à Casablanca</span></div>
+      <div>WhatsApp : <a class="wa-link" href="https://wa.me/212665889233" target="_blank" rel="noopener">+212 665 889 233</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const waNumber = '212665889233';
+    const waText = "Bonjour, je souhaite avoir une estimation gratuite pour mon bien à Casablanca avec Conciergerie Casablanca Heaven.";
+    document.querySelectorAll('.wa-link').forEach(a => {
+      a.href = `https://wa.me/${waNumber}?text=${encodeURIComponent(waText)}`;
+    });
+
+    const grid = document.getElementById('propertiesGrid');
+    const properties = window.HEAVEN_PROPERTIES || [];
+    grid.innerHTML = properties.map(p => `
+      <article class="property reveal">
+        <div class="property-img">
+          <img src="${p.image}" alt="${p.title}" loading="lazy">
+          <span class="badge">${p.tag || 'Bien en gestion'}</span>
+        </div>
+        <div class="property-body">
+          <h3>${p.title}</h3>
+          <p><strong>${p.district}</strong><br>${p.description}</p>
+          <div class="meta"><span>${p.guests || '-'} voyageurs</span><span>${p.bedrooms || '-'} chambre(s)</span></div>
+          <div class="property-actions">
+            <a class="${p.airbnbUrl ? '' : 'disabled'}" href="${p.airbnbUrl || '#'}" target="_blank" rel="noopener">Airbnb</a>
+            <a class="secondary ${p.bookingUrl ? '' : 'disabled'}" href="${p.bookingUrl || '#'}" target="_blank" rel="noopener">Booking</a>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
