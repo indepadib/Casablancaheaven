@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Finance — Conciergerie Zenata</title>
+  <link rel="stylesheet" href="./finance.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="auth">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="logo">CZ</div>
+      <div>
+        <div class="auth-title">Finance Admin</div>
+        <div class="auth-sub">Connexion admin • simple et sécurisé</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input id="authEmail" type="email" placeholder="admin@conciergeriezenata.com" autocomplete="email"/>
+    </div>
+
+    <div class="field">
+      <label>Mot de passe</label>
+      <input id="authPassword" type="password" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+
+    <div class="auth-actions">
+      <button id="btnLogin" class="btn btn-primary">Se connecter</button>
+      <button id="btnMagic" class="btn">Recevoir un lien</button>
+    </div>
+
+    <div id="authMsg" class="muted"></div>
+
+    <div class="auth-help">
+      <div class="muted">Si tu n’arrives pas à te connecter :</div>
+      <ul class="muted">
+        <li>Vérifie que ton user est dans <b>admin_users</b>.</li>
+        <li>Vérifie URL + ANON KEY Supabase.</li>
+        <li>Si besoin, utilise “Recevoir un lien”.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="side-top">
+      <div class="brand">
+        <div class="logo">CZ</div>
+        <div>
+          <div class="title">Finance</div>
+          <div id="whoami" class="subtitle">—</div>
+        </div>
+      </div>
+    </div>
+
+  <nav class="nav">
+  <button class="nav-item active" data-tab="overview">📌 Résumé</button>
+  <button class="nav-item" data-tab="properties">🏠 Biens</button>
+  <button class="nav-item" data-tab="expenses">🧰 Dépenses</button>
+  <button class="nav-item" data-tab="closing">🧾 Clôture du mois</button>
+  <button class="nav-item" data-tab="owners">👤 Propriétaires</button>
+  <button class="nav-item" data-tab="cash">🏦 Trésorerie</button>
+  <button class="nav-item" data-tab="settings">⚙️ Réglages</button>
+</nav>
+
+
+    <div class="side-bottom">
+      <button id="btnLogout" class="btn btn-ghost wfull">Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <div>
+        <h1 id="pageTitle">Résumé</h1>
+        <div id="pageSub" class="muted">Les chiffres importants, sans jargon.</div>
+      </div>
+      <div class="header-actions">
+        <button id="btnReload" class="btn">Rafraîchir</button>
+      </div>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section id="tab-overview" class="tab">
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Ce que Zenata a gagné (commission)</div>
+          <div id="kpiRevenue" class="card-value">—</div>
+          <div class="muted">Basé sur les factures Zenata</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Ce que tu dois aux propriétaires</div>
+          <div id="kpiOwnerDebt" class="card-value">—</div>
+          <div class="muted">Solde ledger propriétaires</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cash Zenata (banque)</div>
+          <div id="kpiCash" class="card-value">—</div>
+          <div class="muted">Somme des comptes de trésorerie</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Closings à faire (ce mois)</div>
+          <div id="kpiPending" class="card-value">—</div>
+          <div class="muted">Biens sans clôture verrouillée</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>À faire maintenant</h2>
+          <div class="muted">3 actions maximum, claires.</div>
+        </div>
+        <div id="todo" class="todo"></div>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section id="tab-closing" class="tab hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <h2>Clôture du mois</h2>
+        <div class="muted">Choisir → vérifier → valider. Tout est calculé automatiquement.</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="card">
+      <h3>1) Choisir</h3>
+      <div class="grid2">
+        <div class="field">
+          <label>Bien</label>
+          <select id="cProperty"></select>
+        </div>
+        <div class="field">
+          <label>Mois</label>
+          <input id="cMonth" type="month"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card">
+      <h3>2) Revenus plateformes</h3>
+      <div class="grid2">
+        <div>
+          <h4>Airbnb</h4>
+          <div class="field">
+            <label>Revenu logement</label>
+            <input id="airbnbHousing" type="number" step="0.01"/>
+          </div>
+          <div class="field">
+            <label>Frais plateforme</label>
+            <input id="airbnbFees" type="number" step="0.01"/>
+          </div>
+          <div class="field">
+            <label>Ménage collecté</label>
+            <input id="airbnbCleaning" type="number" step="0.01"/>
+          </div>
+
+        </div>
+        <div>
+          <h4>Booking</h4>
+          <div class="field">
+            <label>Revenu logement</label>
+            <input id="bookingHousing" type="number" step="0.01"/>
+          </div>
+          <div class="field">
+            <label>Frais plateforme</label>
+            <input id="bookingFees" type="number" step="0.01"/>
+          </div>
+          <div class="field">
+            <label>Ménage collecté</label>
+            <input id="bookingCleaning" type="number" step="0.01"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="muted" id="revTotalMsg"></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card">
+      <h3>3) Déductions</h3>
+      <div class="grid2">
+        <div class="field">
+          <label>Consommables (ce mois)</label>
+          <input id="cConsumables" type="number" step="0.01"/>
+          <div class="hint">Pré-rempli avec le forfait du bien. Modifiable pour ce mois.</div>
+        </div>
+        <div class="field">
+          <label>Dépenses refacturables</label>
+          <input id="cExpenses" type="number" step="0.01" disabled/>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="card highlight">
+      <h3>4) Résumé propriétaire</h3>
+      <div class="summary">
+        <div><span>Revenus logement</span><b id="sHousing">—</b></div>
+        <div><span>Commission Zenata (20%)</span><b id="sCommission">—</b></div>
+        <div><span>Ménage collecté</span><b id="sCleaning">—</b></div>
+        <div><span>Consommables</span><b id="sConsumables">—</b></div>
+        <div><span>Dépenses</span><b id="sExpenses">—</b></div>
+        <hr/>
+        <div class="total"><span>À verser au propriétaire</span><b id="sNet">—</b></div>
+      </div>
+    </div>
+
+    <!-- ACTION -->
+    <div class="actions">
+      <button id="btnCloseMonth" class="btn btn-primary">Valider la clôture du mois</button>
+      <button id="btnOwnerStatement" class="btn">Télécharger relevé propriétaire</button>
+      <button id="btnMarkPaid" class="btn">Marquer comme payé</button>
+      <span id="closeMsg" class="muted"></span>
+    </div>
+  </div>
+</section>
+
+   <section id="tab-expenses" class="tab hidden">
+  <div class="panel">
+    <div class="panel-head line">
+      <div>
+        <h2>Dépenses (biens)</h2>
+        <div class="muted">Ajoute une dépense en 10 secondes. Justificatif optionnel. 🔒 si mois verrouillé.</div>
+      </div>
+      <div class="head-actions">
+        <button id="btnNewExpense" class="btn btn-primary">+ Ajouter</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <div class="field">
+        <label>Bien</label>
+        <select id="fProperty"></select>
+      </div>
+      <div class="field">
+        <label>Mois</label>
+        <input id="fMonth" type="month"/>
+      </div>
+      <div class="field">
+        <label>Recherche</label>
+        <input id="fSearch" placeholder="Rideau, ampoule, linge, dépannage…"/>
+      </div>
+      <div class="field">
+        <label>Type</label>
+        <select id="fBillable">
+          <option value="all">Tout</option>
+          <option value="billable">Refacturée au propriétaire</option>
+          <option value="not_billable">Non refacturée</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="tablewrap">
+      <table class="table table-soft" id="tblExpensesV2">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Bien</th>
+            <th>Description</th>
+            <th>Montant</th>
+            <th>Refacturé</th>
+            <th>Justif</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="muted" id="expListMsg" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="expModal" class="modal hidden">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div id="modalTitle" class="modal-title">Ajouter une dépense</div>
+          <div class="muted">Choisis le bien, le montant, et ajoute un justificatif si tu l’as.</div>
+        </div>
+        <button class="btn btn-ghost" data-close="1">✕</button>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Bien</label>
+          <select id="mProperty"></select>
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input id="mDate" type="date"/>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Montant (MAD)</label>
+          <input id="mAmount" type="number" step="0.01" placeholder="Ex: 250"/>
+        </div>
+        <div class="field">
+          <label>Refacturer au propriétaire ?</label>
+          <select id="mBillToOwner">
+            <option value="true">Oui</option>
+            <option value="false">Non</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <input id="mDesc" placeholder="Ex: Réparation rideau salon"/>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Marge propriétaire (ex: 0.10 = +10%)</label>
+          <input id="mMarkup" type="number" step="0.01" value="0"/>
+          <div class="hint">Optionnel. Laisse 0 si tu ne prends pas de marge sur l’achat.</div>
+        </div>
+
+        <div class="field">
+          <label>Justificatif (PDF/JPG/PNG)</label>
+          <input id="mFile" type="file" accept=".pdf,.jpg,.jpeg,.png"/>
+          <div class="hint">Tu peux ajouter plus tard si besoin.</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btnSaveExpense" class="btn btn-primary">Enregistrer</button>
+        <button id="btnDeleteExpense" class="btn danger hidden">Supprimer</button>
+        <div id="mMsg" class="muted"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <section id="tab-properties" class="tab hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Biens</h2>
+      <div class="muted">Tout est géré par bien : consommables, dépenses, clôture.</div>
+    </div>
+
+    <div class="field">
+      <label>Recherche</label>
+      <input id="propSearch" placeholder="Nom du bien…"/>
+    </div>
+
+    <div class="tablewrap">
+      <table class="table" id="tblProps">
+        <thead>
+          <tr>
+            <th>Bien</th>
+            <th>Propriétaire</th>
+            <th>Consommables (forfait)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+    <!-- OWNERS -->
+    <section id="tab-owners" class="tab hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Propriétaires</h2>
+          <div class="muted">Tu vois directement qui doit recevoir combien.</div>
+        </div>
+
+        <div class="field">
+          <label>Recherche</label>
+          <input id="ownerSearch" placeholder="Nom, email, téléphone…"/>
+        </div>
+
+        <div class="card">
+  <h3>À payer</h3>
+  <div class="muted" id="toPayMsg"></div>
+
+  <div class="tablewrap">
+    <table class="table table-soft" id="tblToPay">
+      <thead>
+        <tr>
+          <th>Propriétaire</th>
+          <th>Bien</th>
+          <th>Mois</th>
+          <th>Montant</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Payé</h3>
+  <div class="muted" id="paidMsg"></div>
+
+  <div class="tablewrap">
+    <table class="table table-soft" id="tblPaid">
+      <thead>
+        <tr>
+          <th>Propriétaire</th>
+          <th>Bien</th>
+          <th>Mois</th>
+          <th>Montant</th>
+          <th>Payé le</th>
+          <th>Réf</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+
+        <div class="tablewrap">
+          <table class="table" id="tblOwners">
+            <thead><tr><th>Nom</th><th>Email</th><th>Balance (MAD)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASH -->
+    <section id="tab-cash" class="tab hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Trésorerie</h2>
+          <div class="muted">Combien on a en banque et d’où ça vient.</div>
+        </div>
+
+        <div class="tablewrap">
+          <table class="table" id="tblCash">
+            <thead><tr><th>Compte</th><th>Balance</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-dashboard" class="tab">
+  <div class="grid4">
+    <div class="kpi"><span>Revenus logement</span><b id="kpiHousing">—</b></div>
+    <div class="kpi"><span>Commission Zenata</span><b id="kpiCommission">—</b></div>
+    <div class="kpi"><span>À verser propriétaires</span><b id="kpiToPay">—</b></div>
+    <div class="kpi"><span>Marge Zenata</span><b id="kpiMargin">—</b></div>
+  </div>
+</section>
+
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="tab hidden">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Réglages</h2>
+          <div class="muted">Commission, consommables, règles…</div>
+        </div>
+
+        <div class="rows">
+          <div class="row">
+            <span class="muted">Commission (par défaut)</span>
+            <span><b>20%</b> hors ménage</span>
+          </div>
+          <div class="row">
+            <span class="muted">Consommables</span>
+            <span>Forfait mensuel par bien (dans finance_settings)</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="muted">Les réglages avancés (TVA, modèles de contrat, exports compta) arrivent ensuite.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="./finance.js"></script>
+</body>
+</html>
